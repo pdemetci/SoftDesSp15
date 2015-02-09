@@ -92,7 +92,6 @@ def rest_of_ORF(dna):
             ORF += dna[i:i+3]
     return ORF
     
-
 def find_all_ORFs_oneframe(dna):
     """ Finds all non-nested open reading frames in the given DNA sequence and returns
         them as a list.  This function should only find ORFs that are in the default
@@ -156,9 +155,9 @@ def longest_ORF(dna):
     >>> longest_ORF("ATGCGAATGTAGCATCAAA")
     'ATGCTACATTCGCAT'
     """
-    # TODO: implement this
-    pass
-
+    for i in find_all_ORFs_both_strands(dna):
+        if max(len(i))== True:
+            print i
 
 def longest_ORF_noncoding(dna, num_trials):
     """ Computes the maximum length of the longest ORF over num_trials shuffles
@@ -167,8 +166,8 @@ def longest_ORF_noncoding(dna, num_trials):
         dna: a DNA sequence
         num_trials: the number of random shuffles
         returns: the maximum length longest ORF """
-    # TODO: implement this
-    pass
+    for i in find_all_ORFs_both_strands(dna):
+        print max(len(i))
 
 def coding_strand_to_AA(dna):
     """ Computes the Protein encoded by a sequence of DNA.  This function
@@ -184,8 +183,12 @@ def coding_strand_to_AA(dna):
         >>> coding_strand_to_AA("ATGCCCGCTTT")
         'MPA'
     """
-    # TODO: implement this
-    pass
+    amino_acids = []
+    for i in range(0,len(dna)-2,3):
+        codon = dna1[i:i+3]
+        if codon in aa_table:
+            amino_acids.append(aa_table[codon])
+    return amino_acids
 
 def gene_finder(dna, threshold):
     """ Returns the amino acid sequences coded by all genes that have an ORF
@@ -197,8 +200,15 @@ def gene_finder(dna, threshold):
         returns: a list of all amino acid sequences whose ORFs meet the minimum
                  length specified.
     """
-    # TODO: implement this
-    pass
+    threshold = longest_ORF_noncoding(dna, 1500)
+    ORFS = find_all_ORFs_both_strands(dna)
+    amino_acids_final = []
+    for i in ORFS:
+        if len(i) > threshold:
+            amino_acid = coding_strand_to_AA(i)
+            amino_acids_final.append(amino_acid)
+    return amino_acids_final
+
 
 if __name__ == "__main__":
     import doctest
