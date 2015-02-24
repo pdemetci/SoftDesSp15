@@ -1,0 +1,3 @@
+Function: 4/5, It looks like longest_ORF did not work, and that you didn't get around to outputting BLAST results.
+Documentation: 3.5/5, no BLAST results, and not many doc string explanations or additions.
+Style: 5/5, Generally pretty good. 

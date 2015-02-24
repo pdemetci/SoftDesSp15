@@ -46,6 +46,7 @@ def get_complement(nucleotide):
         complement += 'G'
     elif nucleotide == 'G':
         complement += 'C'
+    #it'd be best to directly return complement instead of adding to a string that you return at the end.
     else:raise Exception('Invalid nucleotide')
     return complement
 
@@ -87,6 +88,7 @@ def rest_of_ORF(dna):
     ORF=''
     for i in range(0, len(dna), 3):
         if dna[i:i+3] == 'TAG' or dna[i:i+3] == 'TAA' or dna[i:i+3] == 'TGA':
+            #could use if dna[i:i+3] in ('TAG','TAA','TGA')
            return ORF
         else:
             ORF += dna[i:i+3]
@@ -168,6 +170,7 @@ def longest_ORF_noncoding(dna, num_trials):
         returns: the maximum length longest ORF """
     for i in find_all_ORFs_both_strands(dna):
         print max(len(i))
+    #good thought, but running this just runs max on an integer, when max expects a list of values. We should meet to go over what the correct answer is.
 
 def coding_strand_to_AA(dna):
     """ Computes the Protein encoded by a sequence of DNA.  This function
@@ -183,11 +186,11 @@ def coding_strand_to_AA(dna):
         >>> coding_strand_to_AA("ATGCCCGCTTT")
         'MPA'
     """
-    amino_acids = []
+    amino_acids = ''
     for i in range(0,len(dna)-2,3):
-        codon = dna1[i:i+3]
+        codon = dna[i:i+3]
         if codon in aa_table:
-            amino_acids.append(aa_table[codon])
+            amino_acids += aa_table[codon]
     return amino_acids
 
 def gene_finder(dna, threshold):
@@ -213,3 +216,6 @@ def gene_finder(dna, threshold):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+    dna = load_seq("./data/X73525.fa")
+    amino_acids = gene_finder(dna, 1500)
+    print amino_acids
