@@ -160,6 +160,10 @@ def longest_ORF(dna):
     for i in find_all_ORFs_both_strands(dna):
         if max(len(i))== True:
             print i
+    #A solution that would make snese would be:
+   #ORFS = find_all_ORFs_both_strands(dna)
+   #return max(ORFS, key=len)
+   #please read the documentation for the max() function so you'll know what inputs it takes and gives.
 
 def longest_ORF_noncoding(dna, num_trials):
     """ Computes the maximum length of the longest ORF over num_trials shuffles
@@ -170,7 +174,11 @@ def longest_ORF_noncoding(dna, num_trials):
         returns: the maximum length longest ORF """
     for i in find_all_ORFs_both_strands(dna):
         print max(len(i))
-    #good thought, but running this just runs max on an integer, when max expects a list of values. We should meet to go over what the correct answer is.
+    #good thought, but running this just runs max on an integer, when max expects a list of values. We should meet to go over what the correct answer is, as there is clearly a misunderstanding of what this problem is asking for. For reference, a solution that would make sense is:
+   #ORFS = []
+   #for i in range(num_trials):
+   #    ORFS.append(longest_ORF(shuffle_string(dna)))
+   #return max(ORFS, key=len)
 
 def coding_strand_to_AA(dna):
     """ Computes the Protein encoded by a sequence of DNA.  This function
