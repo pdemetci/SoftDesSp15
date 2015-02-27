@@ -21,12 +21,14 @@ def build_random_function(min_depth, max_depth):
     def build_function(depth):
         options1=["prod","sin_pi","cos_pi"]
         options2=["x","y"]
+# not a huge deal, but you forgot to add two functions of your own like the assignment asked for, and didn't have the X and Y functions, which select either the first or the second argument.
         if depth == 1:
             i = randint(0,len(options2)-1)
             return [options2[i]]
+            #instead of using this line, you could use random.choice(options2) to get a random element of the options2 list.
 # "x" and "y" can be in the last depth.
         else:
-            i = randint(0,len(options1)-1)
+            i = randint(0,len(options1)-1)#again, random.choice()
             if options1[i]=="prod": #prod takes 2 inputs so:
                 return [options1[i], build_function(depth-1),build_function(depth-1)]
             else: #others take only one input. so:
@@ -59,6 +61,7 @@ def evaluate_random_function(f, x, y):
     if f[0] == 'sin_pi':
         return sin(pi*evaluate_random_function(f[1],x,y))
     else: print 'You didnt take into account something'
+    #stylistically, it is preferable to use elifs to ifs if the cases that you are checking for are mutually exclusive, which is the case here. Using elif would indicate that only one of the conditions above can ever be true.
 
 def remap_interval(val, input_interval_start, input_interval_end, output_interval_start, output_interval_end):
     """ Given an input value in the interval [input_interval_start,
@@ -88,6 +91,7 @@ def remap_interval(val, input_interval_start, input_interval_end, output_interva
     output_interval_start=float(output_interval_start)
     input_interval_start=float(input_interval_start)
     input_interval_end=float(input_interval_end)
+    #you don't need to cast everything to a float, you just need to cast one of them. This is because python will implicitly convert ints to floats when they are used in an operation with another float. Ex. 5 - 0.1 = 4.9, 5 is automatically being cast from an integer to a float.
     a= (output_interval_end - output_interval_start)/ (input_interval_end - input_interval_start)
     output = ((a*val) - ((a*input_interval_start)-output_interval_start))
     return output
@@ -138,6 +142,7 @@ def generate_art(filename, x_size=350, y_size=350):
                 b = int(b_2)
                 g_2 = remap_interval(g_1,-1,1,0,255)
                 g = int(int(g_2)/10)
+                #not sure what your intention was here when you divided r and g by these factors. Were you just doing this to twiddle with the kinds of colors that were spit out? This is where documentation and comments could really have been useful.
                 print r
                 print b
                 print g
