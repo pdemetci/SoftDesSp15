@@ -1,4 +1,6 @@
 """
+Pinar Demetci
+
 Evolutionary algorithm, attempts to evolve a given message string.
 
 Uses the DEAP (Distributed Evolutionary Algorithms in Python) framework,
@@ -10,7 +12,6 @@ Usage:
 Full instructions are at:
 https://sites.google.com/site/sd15spring/home/project-toolbox/evolutionary-algorithms
 """
-
 import random
 import string
 
@@ -30,6 +31,7 @@ VALID_CHARS = string.ascii_uppercase + " "
 
 # Control whether all Messages are printed as they are evaluated
 VERBOSE = True
+known = {}
 
 
 #-----------------------------------------------------------------------------
@@ -42,6 +44,14 @@ class FitnessMinimizeSingle(base.Fitness):
     objective that we want to minimize (weight = -1)
     """
     weights = (-1.0, )
+
+
+#-----------------------------------------------------------------------------
+# Genetic operators
+#-----------------------------------------------------------------------------
+
+# TODO: Implement levenshtein_distance function (see Day 9 in-class exercises)
+# HINT: Now would be a great time to implement memoization if you haven't
 
 
 class Message(list):
@@ -87,7 +97,6 @@ class Message(list):
         """Return Message as string (rather than actual list of characters)"""
         return "".join(self)
 
-
 #-----------------------------------------------------------------------------
 # Genetic operators
 #-----------------------------------------------------------------------------
@@ -106,6 +115,19 @@ def evaluate_text(message, goal_text, verbose=VERBOSE):
         print "{msg:60}\t[Distance: {dst}]".format(msg=message, dst=distance)
     return (distance, )     # Length 1 tuple, required by DEAP
 
+def levenshtein_distance(s1, s2):
+    """
+    >>> levenshtein_distance('kitten', 'sitting')
+    3
+    """
+    if len(s1) == 0:
+        return len(s2)
+    elif len(s2) == 0:
+        return len(s1)
+    elif (s1, s2) in known:
+        return known[(s1,s2)]
+    known[(s1, s2)] = min([int(s1[0] != s2[0]) + levenshtein_distance(s1[1:], s2[1:]), 1 + levenshtein_distance(s1[1:], s2), 1 + levenshtein_distance(s1, s2[1:])])
+    return known[(s1,s2)]
 
 def mutate_text(message, prob_ins=0.05, prob_del=0.05, prob_sub=0.05):
     """
@@ -121,8 +143,19 @@ def mutate_text(message, prob_ins=0.05, prob_del=0.05, prob_sub=0.05):
     """
 
     if random.random() < prob_ins:
-        # TODO: Implement insertion-type mutation
-        pass
+        i = random.randint(0, len(message)-1) ###
+        message.insert(i, random.choice(list(VALID_CHARS))) ###
+        return (message, ) ###
+
+    elif random.random() < prob_del:
+        i = random.randint(0, len(message)-1)
+        return (message, )
+    elif random.random() < prob_sub:
+        i = random.randint(0, len(message)-1)
+        message.pop(i)
+        message.insert(i, random.choice(list(VALID_CHARS))) 
+        return (message, )
+
 
     # TODO: Also implement deletion and substitution mutations
     # HINT: Message objects inherit from list, so they also inherit
@@ -131,10 +164,16 @@ def mutate_text(message, prob_ins=0.05, prob_del=0.05, prob_sub=0.05):
 
     return (message, )   # Length 1 tuple, required by DEAP
 
-
+def TwoPointCrossover(parent1, parent2):
+    x = random.randint(1,min(len(parent1), len(parent2))/3)
+    new1 = Message(parent2[0:x] + parent1[x:-x] + parent2[-x:])
+    new2 = Message(parent1[0:x] + parent2[x:-x] + parent1[-x:])
+    return (new1, new2)
 #-----------------------------------------------------------------------------
 # DEAP Toolbox and Algorithm setup
 #-----------------------------------------------------------------------------
+
+
 
 def get_toolbox(text):
     """Return DEAP Toolbox configured to evolve given 'text' string"""
@@ -170,7 +209,7 @@ def evolve_string(text):
 
     # Get configured toolbox and create a population of random Messages
     toolbox = get_toolbox(text)
-    pop = toolbox.population(n=300)
+    pop = toolbox.population(n=500)
 
     # Collect statistics as the EA runs
     stats = tools.Statistics(lambda ind: ind.fitness.values)
