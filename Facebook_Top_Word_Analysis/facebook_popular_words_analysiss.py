@@ -1,39 +1,44 @@
+import time
+from pattern.web import * 
+
 def facebook_top_sentiment(token):
-	import time
 	start = time.time()
-	from pattern.web import * 
 	fb = Facebook(license=token)
 	me = fb.profile()
 	#print me #check to see if fb was printing my info
-	my_friends = fb.search(me[0], type=FRIENDS, count=100) #list of my friends ids
+	my_friends = fb.search(me[0], type=FRIENDS, count=2) #list of my friends ids
 	result_ids = []
-	# Creating a frequency dictionary for words in my newsfeed: 
-	from collections import defaultdict
-	fq= defaultdict( int )
+	# Creating a frequency dictionary for words in my newsfeed: ict
+	fq={}
 	for friend in my_friends:
 		result_ids = friend.id.encode('utf-8')
 		#print result_ids #prints all ids of my friends
 	#result_ids = [friend.id.encode('utf-8') for friend in my_friends] #condensed version of code above
-		friend_news = fb.search(friend.id, type=NEWS, count=100) #finds the newsfeeds of all my friends
+		friend_news = fb.search(friend.id, type=NEWS, count=2) #finds the newsfeeds of all my friends
 		for news in friend_news:
-			if 'listed' in news.text or 'invited' in news.text or 'updated' in news.text or 'likes' in news.text or 'shared' in news.text or 'commented' in news.text or 'event' in news.text or 'tagged' in news.text or 'timeline' in news.text or 'changed' in news.text or 'added' in news.text:
-	# or news.author != friend
-				pass
-	# if any of the words appear, print nothing
-			else:
-				News = news.text.encode('utf-8')
-				News1= News.split()
-				if start+30<time.time():
-					break
-				for w in News1:
+			# News = news.text.encode('utf-8')
+			# News1= News.split()
+			# print News1
+	# 		if 'listed' in news.text or 'invited' in news.text or 'updated' in news.text or 'likes' in news.text or 'shared' in news.text or 'commented' in news.text or 'event' in news.text or 'tagged' in news.text or 'timeline' in news.text or 'changed' in news.text or 'added' in news.text:
+	# # or news.author != friend
+	# 			pass
+	# # if any of the words appear, print nothing
+	# 		else:
+			News = news.text.encode('utf-8')
+			News1= News.split()
+			for w in News1:
+				print w
+				if w in fq:
 					fq[w] += 1
+				else: 
+					fq[w]=1
 
-
-	fq_sorted = sorted(fq.items(), key=lambda item: item[1])
-	#fq_top100=[]
-	#fq_new={ fq_sorted.keys[len(fq_sorted)-100:len(fq_sorted)-1]:fq_sorted.values[len(fq_sorted)-100:len(fq_sorted)-1]}
-	for i in range(1,100):
-		return fq_sorted[len(fq_sorted)-i]
+	fq_sorted = sorted(fq.items(), key=lambda item: item[1], reverse=True)
+	print fq_sorted
+	# #fq_top100=[]
+	# #fq_new={ fq_sorted.keys[len(fq_sorted)-100:len(fq_sorted)-1]:fq_sorted.values[len(fq_sorted)-100:len(fq_sorted)-1]}
+	# for i in range(1,10):
+		#return fq_sorted[len(fq_sorted)-i]
 	#final_fq=fq_sorted[len(fq_sorted)-100:len(fq_sorted)]
 	#print final_fq
 
@@ -62,4 +67,4 @@ def facebook_top_sentiment(token):
 	#	if start+30<time.time():
 	#		break
 	# after some time, stop the code and move to word_counter
-	print facebook_top_sentiment('CAAEuAis8fUgBAEdIFJpkwcNiT9SsZB8JTRk9TPnQvnNgc3n0zGUlpaL5ocA7o3P8fYY0YZAe7dqzkwXdvqt9L1tIue0huLIL3emtZAMkYRA53g4FVVmthbSsaIqllXyXJFcYv7nNWrSPEoZAWk3SLFxsbl2HSr6P7YMW0vOtJeHatiZAc2P0C')
+print facebook_top_sentiment('CAAEuAis8fUgBACNwphhY4ZCGeI4LPkzfCR3bfK2mJ1xXE9a3FRSZAqNTd435dRZBX7mam7edwiZBbFWovBkpx9OQxtNGcWaiDPmsfwZBOQgIP0g4zgkKCuMsi3lVAzmYMds9FNhHLKjTp4ZBrOwxeS93QJz5STC7qYIXCHobfjCELZBZCNckT1iA0kCNL6JKfR4ZD')

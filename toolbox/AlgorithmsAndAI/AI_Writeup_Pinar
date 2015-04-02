@@ -1,0 +1,16 @@
+Pinar Demetci
+
+
+0. What are the advantages that A star has over breadth-first search? What advantages does A star have over depth-first search? 
+
+Depth-first search tries almost every node until the goal is reached. It guarantees a path to the goal but not the shortest path.
+Breadth-first search guarantees the shortest path as it evaluates nodes in co-centric circles from the parent node. However, just like depth-first search, it is a "blind" search algorithm in the sense that the algorithm does not know the position of the goal.
+A* search acts according to the position of the goal node and evaluates the cost function to get the shortest path as quickly as possible.
+
+1. Explain what f_score, g_score, and h_score are, and why you see those specific values in the screenshot. 
+
+f_score is the total cost function of the move that is equal to the summation of g_value and h_value.
+g_value represents the total cost of moving to the current node from the initial node. This is quantified by the number of movements (number of nodes taken) until the current node is reached.
+h_value represents the estimated cost to move to the goal node from the current node. Since the future path is not known, it is only an estimate. It is estimated using "Manhattan distance method" where we ignore the obstacles (i.e. lava and swamp) and count the number of nodes in between the goal and the current node that way.
+
+For questions 2-4: Please see screenshots.

@@ -9,6 +9,7 @@ def get_word_list(file_name):
 		returns a list of the words used in the book as a list.
 		All words are converted to lower case.
 	"""
+<<<<<<< HEAD
 	f = open(file_name, 'r')
 	words=[]
 	for word in f:
@@ -28,6 +29,11 @@ def get_word_list(file_name):
 	return all_words
 	
 def get_top_n_words(file_name, n):
+=======
+	pass
+
+def get_top_n_words(word_list, n):
+>>>>>>> 5d728c19d7ef961a52d640267312c597cf953983
 	""" Takes a list of words as input and returns a list of the n most frequently
 		occurring words ordered from most to least frequently occurring.
 
@@ -37,6 +43,7 @@ def get_top_n_words(file_name, n):
 		returns: a list of n most frequently occurring words ordered from most
 				 frequently to least frequentlyoccurring
 	"""
+<<<<<<< HEAD
 	freq_dict={}
 	word_list= get_word_list(file_name)
 	for word in word_list:
@@ -48,3 +55,6 @@ def get_top_n_words(file_name, n):
 
 
 get_top_n_words('Zarathustra.txt', 200)
+=======
+	pass
+>>>>>>> 5d728c19d7ef961a52d640267312c597cf953983

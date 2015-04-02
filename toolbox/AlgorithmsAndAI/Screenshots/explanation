@@ -1,0 +1,15 @@
+Pinar Demetci
+
+diagonal.png
+Cells on the diagonal line of the grid is fully covered by lava so that Paul has to choose to move diagonally. It can be seen that before he takes the diagonal movement, his cost is 8 and after that, it is 11 (8+3)
+
+swamp.png
+The cells in a certain row are all covered by swamp so that Paul has to go through swamp. Before he does, his cost function is 12 and while going through swamp it is 16 (12+3+1) (1 comes from simply moving one cell and 3 comes from going through swamp)
+
+lava.png
+The cells in a certain row are all covered by lava so that Paul has to go through lava. Before he does, his cost function is 13 and while going through lava, it is 22(13+9 +1)
+
+random.png
+just a random scenario.
+
+
