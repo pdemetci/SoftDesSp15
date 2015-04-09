@@ -69,7 +69,7 @@ def get_nearest_station(latitude, longitude):
     else:
         for x in response["stop"]:
             stations.append(x["parent_station_name"])
-        for x, parent_station_name in enumerate(stations):
+        for x,parent_station_name in enumerate(stations):
             if len(parent_station_name) != 0:
                 stations_d[str(parent_station_name)]=float(str(response["stop"][x]["distance"]))
                 stations_d_sorted=sorted(stations_d.items(), key=lambda item: item[1], reverse=False)
@@ -87,6 +87,8 @@ def find_stop_near(place_name):
     longitude=location[1]
     result= get_nearest_station(latitude,longitude)
     print '(Nearest station, Distance):', result
+
+print find_stop_near('Massachusetts General Hospital')
 
 if __name__ == '__main__':
     import doctest
