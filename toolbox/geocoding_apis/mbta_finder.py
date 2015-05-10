@@ -57,32 +57,36 @@ def get_nearest_station(latitude, longitude):
 
     See http://realtime.mbta.com/Portal/Home/Documents for URL
     formatting requirements for the 'stopsbylocation' API.
-    
-    >>> get_nearest_station(str(42.3770029), str(-71.11666009999999))
-    ('Harvard', '0.277270585298538')
+    >>> get_nearest_station(*get_lat_long('Harvard University'))
+    ('Harvard', 0.277270585298538)
     """
     url = MBTA_BASE_URL + '?api_key=' + MBTA_DEMO_API_KEY + '&lat=' + str(latitude) + '&lon=' + str(longitude)
     response= get_json(url)
-    for x in range(len(response['stop'])):
-        if response['stop'][x]['parent_station_name'] == '':
-            pass
-        else:
-            station = response['stop'][x]['parent_station_name']
-            distance = response['stop'][x]['distance'] 
-            return(str(station), str(distance))
+    stations = []
+    stations_d={}
+    if response["stop"] == None:
+        return "There are no stops close to your location"
+    else:
+        for x in response["stop"]:
+            stations.append(x["parent_station_name"])
+        for x, parent_station_name in enumerate(stations):
+            if len(parent_station_name) != 0:
+                stations_d[str(parent_station_name)]=float(str(response["stop"][x]["distance"]))
+                stations_d_sorted=sorted(stations_d.items(), key=lambda item: item[1], reverse=False)
+                return stations_d_sorted[0]
 
 def find_stop_near(place_name):
     """
     Given a place name or address, print the nearest MBTA stop and the 
     distance from the given place to that stop.
     >>> find_stop_near('Harvard University')
-    Nearest station: Harvard , Distance: 0.277270585298538
+    (Nearest station, Distance): ('Harvard', 0.277270585298538)
     """
     location=get_lat_long(place_name)
     latitude=location[0]
     longitude=location[1]
     result= get_nearest_station(latitude,longitude)
-    print 'Nearest station:', str(result[0]),',', 'Distance:', str(result[1])
+    print '(Nearest station, Distance):', result
 
 if __name__ == '__main__':
     import doctest
